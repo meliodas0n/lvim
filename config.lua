@@ -2,17 +2,86 @@
 -- Video Tutorials: https://www.youtube.com/watch?v=sFA9kX-Ud_c&list=PLhoH5vyxr6QqGu0i7tt_XoVK9v-KvZ3m6
 -- Forum: https://www.reddit.com/r/lunarvim/
 -- Discord: https://discord.com/invite/Xb9B4Ny
-vim.opt.relativenumber = true
-vim.o.background = "dark"
-lvim.colorscheme = 'vscode'
-
--- install plugins
 lvim.plugins = {
+  "EdenEast/nightfox.nvim",
+  "rebelot/kanagawa.nvim",
   "ChristianChiarulli/swenv.nvim",
   "stevearc/dressing.nvim",
   "mfussenegger/nvim-dap-python",
-  "Mofiqul/vscode.nvim"
+  "Mofiqul/vscode.nvim",
+  "catppuccin/nvim",
+  "craftzdog/solarized-osaka.nvim",
+  "rose-pine/neovim",
+  "bluz71/vim-nightfly-colors"
 }
+
+vim.opt.relativenumber = false
+vim.o.background = "dark"
+lvim.colorscheme = "vscode"
+
+require("catppuccin").setup({
+  flavour = "mocha", -- latte, frappe, macchiato, mocha
+  background = { -- :h background
+    light = "latte",
+    dark = "mocha",
+  },
+  transparent_background = false, -- disables setting the background color.
+  show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
+  term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+  dim_inactive = {
+    enabled = false, -- dims the background color of inactive window
+    shade = "dark",
+    percentage = 0.15, -- percentage of the shade to apply to the inactive window
+  },
+  no_italic = false, -- Force no italic
+  no_bold = false, -- Force no bold
+  no_underline = false, -- Force no underline
+  styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
+    comments = { "italic" }, -- Change the style of comments
+    conditionals = { "italic" },
+    loops = {},
+    functions = {},
+    keywords = {},
+    strings = {},
+    variables = {},
+    numbers = {},
+    booleans = {},
+    properties = {},
+    types = {},
+    operators = {},
+  },
+  color_overrides = {
+    mocha = {
+      base = "#000000"
+    },
+  },
+  custom_highlights = {},
+  integrations = {
+    cmp = true,
+    gitsigns = true,
+    nvimtree = true,
+    treesitter = true,
+    notify = false,
+    mini = {
+      enabled = true,
+      indentscope_color = "",
+    },
+  },
+})
+
+require('nightfox').setup({
+  options = {
+    styles = {
+      comments = "italic",
+      keywords = "bold",
+      types = "italic,bold",
+    }
+  }
+})
+
+lvim.keys.normal_mode['<F2>'] = ":bprevious<CR>"
+lvim.keys.normal_mode['<F3>'] = ":bnext<CR>"
+lvim.keys.normal_mode['<F4>'] = ":BufferKill<CR>"
 
 -- automatically install python syntax highlighting
 lvim.builtin.treesitter.ensure_installed = {
@@ -21,47 +90,17 @@ lvim.builtin.treesitter.ensure_installed = {
 
 -- setup formatting
 local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup { { name = "black" }, }
-lvim.format_on_save.enabled = true
-lvim.format_on_save.pattern = { "*.py" }
+formatters.setup{{name = "black"},}
+lvim.format_on_save.pattern = {"*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c"}
 
--- setup linting
-local linters = require "lvim.lsp.null-ls.linters"
-linters.setup { { command = "flake8", filetypes = { "python" } } }
+-- 2 indent for python
+vim.api.nvim_create_autocmd("BufEnter", {
+  pattern = { "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c" },
+  command = "setlocal tabstop=2 shiftwidth=2"
+})
 
 -- binding for switching
 lvim.builtin.which_key.mappings["C"] = {
   name = "Python",
   c = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Choose Env" },
 }
-
-
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-
-local on_attach = function(client, bufnr)
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  client.server_capabilities.hoverProvider = false
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-end
-
-require('lspconfig').ruff_lsp.setup {
-  on_attach = on_attach,
-  init_options = {
-    settings = {
-      args = {},
-    }
-  }
-}
-
-
