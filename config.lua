@@ -19,56 +19,6 @@ vim.opt.relativenumber = false
 vim.o.background = "dark"
 lvim.colorscheme = "vscode"
 
-require("catppuccin").setup({
-  flavour = "mocha", -- latte, frappe, macchiato, mocha
-  background = { -- :h background
-    light = "latte",
-    dark = "mocha",
-  },
-  transparent_background = false, -- disables setting the background color.
-  show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
-  term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
-  dim_inactive = {
-    enabled = false, -- dims the background color of inactive window
-    shade = "dark",
-    percentage = 0.15, -- percentage of the shade to apply to the inactive window
-  },
-  no_italic = false, -- Force no italic
-  no_bold = false, -- Force no bold
-  no_underline = false, -- Force no underline
-  styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
-    comments = { "italic" }, -- Change the style of comments
-    conditionals = { "italic" },
-    loops = {},
-    functions = {},
-    keywords = {},
-    strings = {},
-    variables = {},
-    numbers = {},
-    booleans = {},
-    properties = {},
-    types = {},
-    operators = {},
-  },
-  color_overrides = {
-    mocha = {
-      base = "#000000"
-    },
-  },
-  custom_highlights = {},
-  integrations = {
-    cmp = true,
-    gitsigns = true,
-    nvimtree = true,
-    treesitter = true,
-    notify = false,
-    mini = {
-      enabled = true,
-      indentscope_color = "",
-    },
-  },
-})
-
 require('nightfox').setup({
   options = {
     styles = {
@@ -78,10 +28,6 @@ require('nightfox').setup({
     }
   }
 })
-
-lvim.keys.normal_mode['<F2>'] = ":bprevious<CR>"
-lvim.keys.normal_mode['<F3>'] = ":bnext<CR>"
-lvim.keys.normal_mode['<F4>'] = ":BufferKill<CR>"
 
 -- automatically install python syntax highlighting
 lvim.builtin.treesitter.ensure_installed = {
@@ -104,3 +50,23 @@ lvim.builtin.which_key.mappings["C"] = {
   name = "Python",
   c = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Choose Env" },
 }
+
+-- Define the key mappings for <F2>, <F3>, and <F4>
+lvim.keys.normal_mode["<F2>"] =  ":bprevious<CR>"
+lvim.keys.normal_mode["<F3>"] =  ":bnext<CR>"
+lvim.keys.normal_mode["<F4>"] =  ":bd<CR>"
+
+-- Indentation using leader[ and leader]
+lvim.keys.normal_mode["<leader>["] = "<<"
+lvim.keys.normal_mode["<leader>]"] = ">>"
+lvim.keys.visual_mode["<leader>["] = "<gv"
+lvim.keys.visual_mode["<leader>]"] = ">gv"
+
+-- Define custom key mappings for splitting horizontally and vertically
+lvim.keys.normal_mode["<Leader>-"] = ":split<CR>"
+lvim.keys.normal_mode["<Leader>|"] = ":vsplit<CR>"
+
+-- Move between split windows using leader key + arrow keys
+lvim.keys.normal_mode["<Leader><Up>"] = "<C-w>k"
+lvim.keys.normal_mode["<Leader><Down>"] = "<C-w>j"
+lvim.keys.normal_mode["<Leader><Left>"] = "<C-w>h"
