@@ -12,12 +12,14 @@ lvim.plugins = {
   "catppuccin/nvim",
   "craftzdog/solarized-osaka.nvim",
   "rose-pine/neovim",
-  "bluz71/vim-nightfly-colors"
+  "bluz71/vim-nightfly-colors",
+  "altercation/vim-colors-solarized",
+  "olivercederborg/poimandres.nvim"
 }
 
 vim.opt.relativenumber = false
 vim.o.background = "dark"
-lvim.colorscheme = "vscode"
+lvim.colorscheme = "poimandres"
 
 require('nightfox').setup({
   options = {
@@ -37,11 +39,11 @@ lvim.builtin.treesitter.ensure_installed = {
 -- setup formatting
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup{{name = "black"},}
-lvim.format_on_save.pattern = {"*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c"}
+lvim.format_on_save.pattern = { "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c"}
 
--- 2 indent for python
+-- 2 indent for frontend 
 vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = { "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c" },
+  pattern = { "*.py", "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c" },
   command = "setlocal tabstop=2 shiftwidth=2"
 })
 
@@ -70,3 +72,4 @@ lvim.keys.normal_mode["<Leader>|"] = ":vsplit<CR>"
 lvim.keys.normal_mode["<Leader><Up>"] = "<C-w>k"
 lvim.keys.normal_mode["<Leader><Down>"] = "<C-w>j"
 lvim.keys.normal_mode["<Leader><Left>"] = "<C-w>h"
+lvim.keys.normal_mode["<Leader><Right>"] = "<C-w>l"
