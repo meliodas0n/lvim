@@ -17,6 +17,14 @@ lvim.plugins = {
   "olivercederborg/poimandres.nvim"
 }
 
+-- hopefully fixes the explorer problem
+local function open_nvim_tree()
+  require("nvim-tree.api").tree.open()
+end
+
+vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+vim.api.nvim_set_keymap('n', '<Leader>e', ":lua require'nvim-tree'.focus()<CR>", { noremap = true, silent = true })
+
 vim.opt.relativenumber = false
 vim.o.background = "dark"
 lvim.colorscheme = "poimandres"
