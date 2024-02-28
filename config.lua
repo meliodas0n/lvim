@@ -18,13 +18,18 @@ lvim.plugins = {
 	"mrjones2014/nvim-ts-rainbow",
 }
 
--- hopefully fixes the explorer problem
-local function open_nvim_tree()
-	require("nvim-tree.api").tree.open()
+local nvimTreeFocusOrToggle = function ()
+	local nvimTree=require("nvim-tree.api")
+	local currentBuf = vim.api.nvim_get_current_buf()
+	local currentBufFt = vim.api.nvim_get_option_value("filetype", { buf = currentBuf })
+	if not currentBufFt == "NvimTree" then
+		nvimTree.tree.toggle()
+  else
+    nvimTree.tree.focus()
+	end
 end
 
-vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
-vim.api.nvim_set_keymap("n", "<Leader>e", ":lua require'nvim-tree'.focus()<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<A-e>", nvimTreeFocusOrToggle)
 
 vim.opt.relativenumber = false
 vim.o.background = "dark"
