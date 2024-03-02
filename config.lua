@@ -3,30 +3,30 @@
 -- Forum: https://www.reddit.com/r/lunarvim/
 -- Discord: https://discord.com/invite/Xb9B4Ny
 lvim.plugins = {
-	"EdenEast/nightfox.nvim",
-	"rebelot/kanagawa.nvim",
-	"ChristianChiarulli/swenv.nvim",
-	"stevearc/dressing.nvim",
-	"mfussenegger/nvim-dap-python",
-	"Mofiqul/vscode.nvim",
-	"catppuccin/nvim",
-	"craftzdog/solarized-osaka.nvim",
-	"rose-pine/neovim",
-	"bluz71/vim-nightfly-colors",
-	"altercation/vim-colors-solarized",
-	"olivercederborg/poimandres.nvim",
-	"mrjones2014/nvim-ts-rainbow",
+  "EdenEast/nightfox.nvim",
+  "rebelot/kanagawa.nvim",
+  "ChristianChiarulli/swenv.nvim",
+  "stevearc/dressing.nvim",
+  "mfussenegger/nvim-dap-python",
+  "Mofiqul/vscode.nvim",
+  "catppuccin/nvim",
+  "craftzdog/solarized-osaka.nvim",
+  "rose-pine/neovim",
+  "bluz71/vim-nightfly-colors",
+  "altercation/vim-colors-solarized",
+  "olivercederborg/poimandres.nvim",
+  "mrjones2014/nvim-ts-rainbow",
 }
 
-local nvimTreeFocusOrToggle = function ()
-	local nvimTree=require("nvim-tree.api")
-	local currentBuf = vim.api.nvim_get_current_buf()
-	local currentBufFt = vim.api.nvim_get_option_value("filetype", { buf = currentBuf })
-	if not currentBufFt == "NvimTree" then
-		nvimTree.tree.toggle()
+local nvimTreeFocusOrToggle = function()
+  local nvimTree = require("nvim-tree.api")
+  local currentBuf = vim.api.nvim_get_current_buf()
+  local currentBufFt = vim.api.nvim_get_option_value("filetype", { buf = currentBuf })
+  if not currentBufFt == "NvimTree" then
+    nvimTree.tree.toggle()
   else
     nvimTree.tree.focus()
-	end
+  end
 end
 
 vim.keymap.set("n", "<A-e>", nvimTreeFocusOrToggle)
@@ -39,35 +39,36 @@ lvim.colorscheme = "poimandres"
 lvim.builtin.treesitter.rainbow.enable = true
 
 require("nightfox").setup({
-	options = {
-		styles = {
-			comments = "italic",
-			keywords = "bold",
-			types = "italic,bold",
-		},
-	},
+  options = {
+    styles = {
+      comments = "italic",
+      keywords = "bold",
+      types = "italic,bold",
+    },
+  },
 })
 
 -- automatically install python syntax highlighting
 lvim.builtin.treesitter.ensure_installed = {
-	"python",
+  "python",
 }
 
 -- setup formatting
 local formatters = require("lvim.lsp.null-ls.formatters")
-formatters.setup({ { name = "black" } })
+formatters.setup({ { name = "black" }, { name = "prettier", args = { "--print-width", "150" } } })
+lvim.format_on_save.enabled = true
 lvim.format_on_save.pattern = { "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c" }
 
 -- 2 indent for frontend
 vim.api.nvim_create_autocmd("BufEnter", {
-	pattern = { "*.py", "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c" },
-	command = "setlocal tabstop=2 shiftwidth=2",
+  pattern = { "*.py", "*.tsx", "*.html", "*.css", "*.sh", "*.sql", "*.cpp", "*.c" },
+  command = "setlocal tabstop=2 shiftwidth=2",
 })
 
 -- binding for switching
 lvim.builtin.which_key.mappings["C"] = {
-	name = "Python",
-	c = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Choose Env" },
+  name = "Python",
+  c = { "<cmd>lua require('swenv.api').pick_venv()<cr>", "Choose Env" },
 }
 
 -- Define the key mappings for <F2>, <F3>, and <F4>
