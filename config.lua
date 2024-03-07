@@ -16,6 +16,7 @@ lvim.plugins = {
   "altercation/vim-colors-solarized",
   "olivercederborg/poimandres.nvim",
   "mrjones2014/nvim-ts-rainbow",
+  "ellisonleao/gruvbox.nvim"
 }
 
 local nvimTreeFocusOrToggle = function()
@@ -33,7 +34,7 @@ vim.keymap.set("n", "<A-e>", nvimTreeFocusOrToggle)
 
 vim.opt.relativenumber = false
 vim.o.background = "dark"
-lvim.colorscheme = "poimandres"
+lvim.colorscheme = "catppuccin-mocha"
 
 -- rainbow parantheses
 lvim.builtin.treesitter.rainbow.enable = true
